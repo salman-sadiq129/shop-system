@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سیستەمی یەکگرتووی دووکان</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header><h1>🚬 سیستەمی یەکگرتووی دووکان</h1><span id="conn">…</span></header>
+<nav id="tabs"></nav>
+<main>
+
+<section id="dash">
+  <div class="bar"><h2>ڕاپۆرتی گشتی</h2><span><button onclick="App.load()">🔄 نوێکردنەوە</button><button class="ok" onclick="App.mods.dash.xlsx()">📥 Excel</button></span></div>
+  <div id="cards" class="cards"></div>
+  <h3>بەراوردی بەشەکان</h3>
+  <table><thead><tr><th>بەش</th><th>بڕ</th><th>ژمارە</th></tr></thead><tbody id="sysBody"></tbody></table>
+  <h3>دوایین فرۆشتنەکان</h3>
+  <table><thead><tr><th>بەروار</th><th>کاڵاکان</th><th>کۆ</th><th>قازانج</th></tr></thead><tbody id="recentBody"></tbody></table>
+</section>
+
+<section id="inv" hidden>
+  <h2>📦 مەخزەن</h2>
+  <input id="invQ" placeholder="🔍 گەڕان بە ناوی کاڵا" oninput="App.mods.inv.render()">
+  <div class="grid">
+    <input type="hidden" id="invId">
+    <input id="invName" placeholder="ناوی کاڵا">
+    <select id="invUnit"><option>کارتۆن</option><option>دانە</option><option>پاکێت</option></select>
+    <input id="invBuy" type="number" placeholder="نرخی کڕین">
+    <input id="invSell" type="number" placeholder="نرخی فرۆشتن">
+    <input id="invStock" type="number" placeholder="بڕ">
+    <input id="invMin" type="number" placeholder="کەمترین بڕ" value="5">
+  </div>
+  <button onclick="App.mods.inv.save()">💾 پاشەکەوتکردن</button>
+  <button class="x" onclick="App.mods.inv.reset()">پاشگەزبوونەوە</button>
+  <p id="lowAlert" class="alert" hidden>⚠️ هەندێک کاڵا کەمە!</p>
+  <table><thead><tr><th>ژ</th><th>ناو</th><th>جۆر</th><th>کڕین</th><th>فرۆشتن</th><th>مەخزەن</th><th></th></tr></thead><tbody id="invBody"></tbody></table>
+</section>
+
+<section id="pos" hidden>
+  <h2>🛒 فرۆشتن</h2>
+  <div class="two">
+    <div><h3>کاڵاکان</h3><div id="posItems"></div></div>
+    <div><h3>سەبەتە</h3><div id="cart"></div>
+      <p class="total">کۆ: <b id="cartTotal">0</b></p>
+      <button class="ok wide" onclick="App.mods.pos.done()">✓ تەواوکردنی فرۆشتن</button></div>
+  </div>
+</section>
+
+<section id="shift" hidden>
+  <h2>⏱️ فرۆشتنی شێفت</h2>
+  <div id="shiftBtns" class="seg"></div>
+  <div class="grid">
+    <input id="shItem" placeholder="ناوی کاڵا"><input id="shPrice" type="number" placeholder="نرخ">
+    <input id="shQty" type="number" value="1" placeholder="چەندی">
+    <button onclick="App.mods.shift.add()">➕ زیادکردن</button>
+  </div>
+  <h3>بەپێی شێفت</h3>
+  <table><thead><tr><th>شێفت</th><th>ژمارە</th><th>کۆ</th><th>ڕێژە</th></tr></thead><tbody id="shiftSum"></tbody></table>
+  <div class="bar"><h3>لیستی فرۆشتنەکان</h3><button class="x" onclick="App.mods.shift.clear()">🗑️ سڕینەوەی هەموو (پاسۆرد)</button></div>
+  <table><thead><tr><th>#</th><th>شێفت</th><th>کاڵا</th><th>نرخ</th><th>چەندی</th><th>کۆ</th><th>کات</th><th></th></tr></thead><tbody id="shiftBody"></tbody></table>
+</section>
+
+<section id="debt" hidden>
+  <h2>💰 دەین و قەرز</h2>
+  <div class="grid">
+    <input id="dNo" placeholder="ژمارەی وەسڵ"><input id="dDate" type="date">
+    <input id="dName" list="dNames" placeholder="ناوی کڕیار"><datalist id="dNames"></datalist>
+    <input id="dSale" type="number" placeholder="بڕی فرۆتن"><input id="dPaid" type="number" placeholder="پارەی وەرگیراو">
+    <button onclick="App.mods.debt.add()">➕ زیادکردنی وەسڵ</button>
+  </div>
+  <h3>کڕیارەکان</h3>
+  <table><thead><tr><th>کڕیار</th><th>فرۆتن</th><th>وەرگیراو</th><th>دەین</th></tr></thead><tbody id="dCust"></tbody></table>
+  <input id="dQ" placeholder="🔍 گەڕان بە ناوی کڕیار" oninput="App.mods.debt.render()">
+  <table><thead><tr><th>بەروار</th><th>وەسڵ</th><th>کڕیار</th><th>فرۆتن</th><th>وەرگیراو</th><th>دەین</th><th></th></tr></thead><tbody id="dBody"></tbody></table>
+</section>
+
+<section id="ret" hidden>
+  <h2>↩️ گەڕانەوەی دووکان</h2>
+  <div class="grid">
+    <input id="rName" placeholder="جۆری جگەرە"><input id="rQty" type="number" placeholder="ژمارەی تەک"><input id="rPrice" type="number" placeholder="نرخی یەک تەک">
+    <button onclick="App.mods.ret.add()">➕ زیادکردن</button>
+  </div>
+  <table><thead><tr><th>ژ</th><th>جۆر</th><th>تەک</th><th>نرخ</th><th>کۆ</th><th></th></tr></thead><tbody id="retBody"></tbody></table>
+  <button class="x" onclick="App.mods.ret.clear()">🗑️ سڕینەوەی هەموو</button>
+</section>
+
+</main>
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-firestore-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script src="js/modules/inventory.js"></script>
+<script src="js/modules/pos.js"></script>
+<script src="js/modules/shifts.js"></script>
+<script src="js/modules/debt.js"></script>
+<script src="js/modules/returns.js"></script>
+<script src="js/modules/dashboard.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

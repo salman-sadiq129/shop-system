@@ -1,0 +1,10 @@
+// نموونە — لە Firebase Console > Firestore > Rules دایبنێ.
+// ئاگاداری: بێ چوونەژوورەوە (Auth) هەرکەسێک لینکەکە بزانێت دەتوانێت بخوێنێتەوە/بنووسێت.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    match /inventory/{id} { allow read, write: if true; }
+    match /sales/{id}     { allow read, write: if true; }
+    match /{other=**}     { allow read, write: if false; }
+  }
+}
